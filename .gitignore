@@ -1,0 +1,11 @@
+.venv/
+venv/
+data/
+path/to/venv/
+https://
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.vscode/
+*.log
