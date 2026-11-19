@@ -1,16 +1,20 @@
+import pickle as pkl
+import os
+import sys # to check OS
+
 import numpy as np
 import pandas as pd
-import pickle as pkl
-from pathlib import Path
 import matplotlib.pyplot as plt
+
+import cv2
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
-import cv2
 from torchmetrics.classification import MulticlassPrecision, MulticlassRecall, MulticlassF1Score
+
 from classifierModel import ClassifierModel # Our created ClassifierModel class
-import sys # to check OS
+
 
 device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
 print(f"Using {device} device")
@@ -202,7 +206,7 @@ def loadOrTrainModel(pickle_model_path):
     If it does not exist, calls trainAndSaveModel.
     pickle_model_path: str
     '''
-    if not Path(pickle_model_path).is_file():
+    if not os.path.exists(pickle_model_path):
         print("Previously saved/pickled model does not exist. Beginning ten-fold training and testing.")
         trainAndSaveModel(pickle_model_path)
 
@@ -351,7 +355,8 @@ def main():
         print("\nSending predicted character to virtual keyboard...")
 
         # Supports virtual keyboard character printing on Linux machines only
-        if sys.platform == "Linux":
+        print(sys.platform)
+        if sys.platform == "linux":
             from keyOut import keyOut
 
             # Pass the CNN prediction and selected category
@@ -361,5 +366,4 @@ def main():
             print("Virtual keyboard output is only supported on Linux; skipping.")
         
 
-if __name__ == "__main__":
-    main()
+main()
